@@ -354,6 +354,12 @@
             const elapsedSecs = elapsedMs / 1000; // Float for smooth clock
             const elapsedInt = Math.floor(elapsedSecs);
 
+            // Auto-Reset after 4 minutes (240 seconds)
+            if (elapsedInt >= 240) {
+                resetTimer();
+                return;
+            }
+
             // Check Schedule
             let activeStepIdx = -1;
             for (let i = schedule.length - 1; i >= 0; i--) {
