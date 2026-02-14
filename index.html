@@ -243,17 +243,50 @@
                 }
             }
 
+            // Calculate progress for current step (0.0 to 1.0)
+            const stepDuration = stepEnd - stepStart;
+            const stepElapsed = elapsedSecs - stepStart;
+            let progress = Math.min(Math.max(stepElapsed / stepDuration, 0), 1);
+
+            // --- Water Fill Animation ---
+            // Create a clipping region for the circle so water stays inside
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius - 15, 0, 2 * Math.PI); // Slightly smaller than ring
+            ctx.clip();
+
+            // Calculate water height based on progress (from bottom up)
+            // Height moves from (centerY + radius) to (centerY - radius)
+            const waterLevel = (centerY + radius) - (progress * (radius * 2));
+            
+            // Draw Wave
+            const time = Date.now() / 200; // Animation speed
+            ctx.fillStyle = 'rgba(76, 175, 80, 0.3)'; // Semi-transparent green water
+            ctx.beginPath();
+            
+            // Start at left edge
+            ctx.moveTo(centerX - radius, waterLevel);
+            
+            // Draw sine wave across
+            for (let x = centerX - radius; x <= centerX + radius; x += 10) {
+                const y = waterLevel + Math.sin(x / 20 + time) * 5; // Wave amplitude
+                ctx.lineTo(x, y);
+            }
+            
+            // Fill down to bottom
+            ctx.lineTo(centerX + radius, centerY + radius);
+            ctx.lineTo(centerX - radius, centerY + radius);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+
+            // --- Draw Ring (Existing) ---
             // Draw Background Circle (Track)
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
             ctx.lineWidth = 15;
             ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
             ctx.stroke();
-
-            // Calculate progress for current step (0.0 to 1.0)
-            const stepDuration = stepEnd - stepStart;
-            const stepElapsed = elapsedSecs - stepStart;
-            let progress = Math.min(Math.max(stepElapsed / stepDuration, 0), 1);
             
             // Draw Progress Arc
             const startAngle = -0.5 * Math.PI; // 12 o'clock
