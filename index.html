@@ -137,10 +137,10 @@
         // --- Configuration ---
         const schedule = [
             { time: 0, text: "Pour Water (Bloom)", color: "#8d6e63" }, 
-            { time: 30, text: "Pour Water (1st Pour)", color: "#5d4037", resetDisplay: true }, 
+            { time: 30, text: "Pour Water (1st Pour)", color: "#5d4037" }, 
             { time: 90, text: "Pour Water (2nd Pour)", color: "#4e342e" }, 
             { time: 150, text: "Pour Water (Final Pour)", color: "#3e2723" }, 
-            { time: 210, text: "Remove Dripper!", color: "#f44336", final: true } 
+            { time: 180, text: "Remove Dripper!", color: "#f44336", final: true } 
         ];
 
         // --- State ---
@@ -149,6 +149,7 @@
         let timerInterval = null;
         let isRunning = false;
         let currentStepIndex = -1;
+        let warningActive = false;
         
         // --- Elements ---
         const timerDisplay = document.getElementById('timer');
